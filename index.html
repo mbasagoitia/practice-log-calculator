@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400&display=swap" rel="stylesheet">
+    <title>Musician's Practice Log</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/6933912c3c.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="background">
+        <h1 class="title">Daily Practice Log</h1>
+        <h2 class="date">(Date)</h2>
+        <div class="form-content-wrapper">
+            <div class="form-wrapper">
+                <div class="left-wrapper">
+                    <div class="question-response-form">
+                        <p id="greeting" class="question">Good (morning)! How long do you have to practice today?</p>
+                        <div class="number-input-wrapper">
+                            <input type="number" min="0" max="24" class="response-box" id="practice-time-hours"><p class="response-text">hour(s)</p><input
+                            type="number" min="0" max="59" class="response-box" id="practice-time-minutes"><p class="response-text">minutes</p>
+                        </div>    
+                        <p class="question">How long do you want your warm up to be?</p>
+                        <div class="number-input-wrapper">
+                            <input type="number" class="response-box" id="warmup-input"><p class="response-text">minutes</p>
+                        </div>
+                        <p class="question">Which solo pieces will you practice today?</p>
+                        <input id="solo-1" type="text" class="response-box">
+                        <input id="solo-2" type="text" class="response-box">
+                        <input id="solo-3" type="text" class="response-box">
+                        <p class="question">Which chamber music pieces?</p>
+                        <input id="chamber-1" type="text" class="response-box">
+                        <input id="chamber-2" type="text" class="response-box">
+                        <input id="chamber-3" type="text" class="response-box">
+                        <p class="question">Which large ensemble pieces?</p>
+                        <input id="ens-1" type="text" class="response-box">
+                        <input id="ens-2" type="text" class="response-box">
+                        <input id="ens-3" type="text" class="response-box">
+                        <p class="question">Any other music?</p>
+                        <input id="other-1" type="text" class="response-box">
+                        <input id="other-2" type="text" class="response-box">
+                        <input id="other-3" type="text" class="response-box">
+                    </div>
+                </div>
+                <div class="right-wrapper">
+                    <div class="time-calc-form">
+                        <p class="question">What percent of your time do you want to dedicate to solo repertoire?</p>
+                        <div class="number-input-wrapper">
+                            <input type="number" min="0" max="100" step="5" class="response-box" id="solo-percent-input">
+                            <p class="percent">&#37</p>
+                        </div>
+                        <p class="question">And to chamber music?</p>
+                        <div class="number-input-wrapper">
+                            <input type="number" min="0" max="100" step="5" class="response-box" id="chamber-percent-input">
+                            <p class="percent">&#37</p>
+                        </div>
+                        <p class="question">To large ensemble music?</p>
+                        <div class="number-input-wrapper">
+                            <input type="number" min="0" max="100" step="5" class="response-box" id="ens-percent-input">
+                            <p class="percent">&#37</p>
+                        </div>
+                        <p class="question">To any other music?</p>
+                        <div class="number-input-wrapper">
+                            <input type="number" min="0" max="100" step="5" class="response-box" id="other-percent-input">
+                            <p class="percent">&#37</p>
+                        </div>
+                        <label for="randomize-order-box" id="randomize-order-label">Randomize order</label>
+                        <input type="checkbox" id="randomize-order-box">
+                        <button id="show-chart-button" onclick="createChart()">Create practice chart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--need to add hidden class to this wrapper eventually-->
+        <div class="chart-content-wrapper hidden">
+            <div class="print-button-wrapper no-print">
+                <button id="print-button" onclick="window.print()"><i class="fa-solid fa-print"></i></button>
+            </div>
+            <button id="show-form-button" onclick="showForm()">Edit form</button>
+            <table class="practice-chart" id="practice-chart">
+                <tr>
+                    <th id="warmup-time-chart" class="warm-up no-border"></th>
+                </tr>
+                <tr>
+                    <td class="no-border"></td>
+                    <th colspan="5" class="skills-practiced no-border"><p>Skills Practiced</p><p>(Check when completed)</p></th>
+                </tr>
+                <tr>
+                    <th id="solo-row" class="no-border">Solo Pieces (x minutes)</th>
+                    <th class="no-border">Intonation</th>
+                    <th class="no-border">Rhythm</th>
+                    <th class="no-border">Phrasing</th>
+                    <th class="no-border">Musicality</th>
+                    <th class="no-border">Other</th>
+                </tr>
+                <tr id="solo-1-row">
+                    <td id="solo-1-chart" class="pieces-list">Solo piece 1</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr id="solo-2-row">
+                    <td id="solo-2-chart" class="pieces-list">Solo piece 2</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr id="solo-3-row">
+                    <td id="solo-3-chart" class="pieces-list">Solo piece 3</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr>
+                    <th class="no-border" id="chamber-title">Chamber music (x minutes)</th> 
+                </tr>
+                <tr id="chamber-row">
+                    <td id="chamber-1-chart" class="pieces-list">Chamber music piece 1</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr id="chamber-2-row">
+                    <td id="chamber-2-chart" class="pieces-list">Chamber music piece 2</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr id="chamber-3-row">
+                    <td id="chamber-3-chart" class="pieces-list">Chamber music piece 3</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>               
+                <tr>
+                    <th class="no-border" id="ens-title">Ensemble music (x minutes)</th>
+                </tr>
+                <tr id="ens-row">
+                    <td id="ens-1-chart" class="pieces-list">Ensemble music piece 1</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr id="ens-2-row">
+                    <td id="ens-2-chart" class="pieces-list">Ensemble music piece 2</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr id="ens-3-row">
+                    <td id="ens-3-chart" class="pieces-list">Ensemble music piece 3</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>               
+                <tr>
+                    <th class="no-border" id="other-title">Other music (x minutes)</th>
+                </tr>
+                <tr id="other-row">
+                    <td id="other-1-chart" class="pieces-list">Other piece 1</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr id="other-2-row">
+                    <td id="other-2-chart" class="pieces-list">Other piece 2</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>
+                <tr id="other-3-row">
+                    <td id="other-3-chart" class="pieces-list">Other piece 3</td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                    <td class="empty-space"><i class="fa-solid fa-check"></i></td>
+                </tr>        
+            </table>
+            <div class="practice-notes-wrapper">
+                <label for="practice-notes" class="practice-notes-label">Notes:</label>
+                <textarea id="practice-notes"></textarea>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
